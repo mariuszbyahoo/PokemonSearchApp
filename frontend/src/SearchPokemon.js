@@ -18,7 +18,8 @@ const SearchPokemon = () => {
         }
 
         try {
-            const response = await fetch(`/api/SearchByName?name=${encodeURIComponent(pokemonName)}`);
+            let apiBaseUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:7239' : '';
+            const response = await fetch(`${apiBaseUrl}/api/SearchByName?name=${encodeURIComponent(pokemonName)}`);
 
             if(!response.ok && response.status !== 404){
                 throw new Error(`Server responded with status ${response.status}: ${response.statusText}`);
