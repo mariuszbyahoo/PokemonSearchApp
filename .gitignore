@@ -69,6 +69,28 @@ ScaffoldingReadMe.txt
 # StyleCop
 StyleCopReport.xml
 
+# Ignore dependencies in the frontend folder
+/frontend/node_modules
+/frontend/.pnp
+/frontend/.pnp.js
+
+# Ignore testing-related files
+/frontend/coverage
+
+# Ignore production build files
+/frontend/build
+
+# Ignore miscellaneous files
+/frontend/.DS_Store
+/frontend/.env.local
+/frontend/.env.development.local
+/frontend/.env.test.local
+/frontend/.env.production.local
+
+/frontend/npm-debug.log*
+/frontend/yarn-debug.log*
+/frontend/yarn-error.log*
+
 # Files built by Visual Studio
 *_i.c
 *_p.c
