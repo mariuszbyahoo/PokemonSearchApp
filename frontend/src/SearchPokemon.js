@@ -4,14 +4,16 @@ const SearchPokemon = () => {
     const [pokemonName, setPokemonName] = useState("");
     const [pokemonData, setPokemonData] = useState(null);
     const [shinyMode, setShinyMode] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
 
     const handleSearch = async () => {
         setError("");
         setPokemonData(null);
-
+        setIsLoading(true);
         if(!pokemonName){
             setError("Please enter a Pokémon name.");
+            setIsLoading(false);
             return;
         }
 
@@ -21,7 +23,6 @@ const SearchPokemon = () => {
             if(!response.ok && response.status !== 404){
                 throw new Error(`Server responded with status ${response.status}: ${response.statusText}`);
             }
-
             const data = await response.json(); 
 
             if (data && data.data) {
@@ -32,7 +33,52 @@ const SearchPokemon = () => {
         } catch (err) {
             setError(`An error occured while fetching Pokémon details: ${err}`);
         }
+        finally {
+            setIsLoading(false);
+        }
     };
+
+    let content;
+    if(isLoading) {
+        content = (
+            <div className="text-center mt-3">
+                <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        );
+    } else if (error) {
+        content = (
+            <div className="text-center mt-3">
+                <p className="text-danger">{error}</p>
+            </div>
+        );
+    } else if (pokemonData) {
+        content = (
+            <div className="text-center mt-4">
+                <h4>{pokemonData.name}</h4>
+                <img
+                    src={shinyMode ? pokemonData.spriteImageUrl : pokemonData.baseImageUrl}
+                    alt={`${pokemonData.name} sprite`}
+                    className="img-fluid"
+                    style={{ width: "150px", height: "150px" }}
+                />
+                <div className="mt-2">
+                    <label>
+                        <input
+                            type="checkbox"
+                            checked={shinyMode}
+                            onChange={(e) => setShinyMode(e.target.checked)}
+                            className="me-2"
+                        />
+                        Shiny Mode
+                    </label>
+                </div>
+            </div>
+        );
+    } else {
+        content = null;
+    }
 
     return (
         <div className="container mt-5">
@@ -62,38 +108,7 @@ const SearchPokemon = () => {
                 </div>
             </div>
 
-            {error && (
-                <div className="row mt-3">
-                    <div className="col text-center">
-                        <p className="text-danger">{error}</p>
-                    </div>
-                </div>
-            )}
-
-            {pokemonData && (
-                <div className="row mt-4">
-                    <div className="col text-center">
-                        <h4>{pokemonData.name}</h4>
-                        <img
-                            src={shinyMode ? pokemonData.spriteImageUrl : pokemonData.baseImageUrl}
-                            alt={`${pokemonData.name} sprite`}
-                            style={{ width: "150px", height: "150px" }}
-                            className="img-fluid"
-                        />
-                        <div className="mt-2">
-                            <label>
-                                <input
-                                    type="checkbox"
-                                    checked={shinyMode}
-                                    onChange={(e) => setShinyMode(e.target.checked)}
-                                    className="me-2"
-                                />
-                                Shiny Mode
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            )}
+            {content}
         </div>
     );
 };
