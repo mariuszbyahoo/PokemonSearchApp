@@ -15,8 +15,7 @@ const SearchPokemon = () => {
             return;
         }
 
-        try{
-            debugger;
+        try {
             const response = await fetch(`/api/SearchByName?name=${encodeURIComponent(pokemonName)}`);
 
             if(!response.ok && response.status !== 404){
@@ -36,33 +35,60 @@ const SearchPokemon = () => {
     };
 
     return (
-        <div style={{ padding: "2%", textAlign: "center"}}>
-            <h3>Pokemon Search</h3>
+        <div className="container mt-5">
+            <div className="row">
+                <div className="col text-center">
+                    <h3>Pokémon Search</h3>
+                </div>
+            </div>
 
-            <input type="text" value={pokemonName} onChange={(e) => setPokemonName(e.target.value)} placeholder="Enter Pokemon name"
-                style={{ padding: "1%", width: "30%", fontSize: "16px"}}
-            />
+            <div className="row mt-3 justify-content-center">
+                <div className="col-12 col-md-8 col-lg-6 d-flex flex-column flex-md-row align-items-center">
+                    <input
+                        type="text"
+                        value={pokemonName}
+                        onChange={(e) => setPokemonName(e.target.value)}
+                        placeholder="Enter Pokémon name"
+                        className="form-control mb-2 mb-md-0 me-md-2"
+                        style={{ flex: "1 1 auto", minWidth: "75%" }}
+                    />
+                    <button
+                        onClick={handleSearch}
+                        className="btn btn-danger w-100 w-md-auto"
+                        style={{ backgroundColor: "#E31937" }}
+                    >
+                        Search
+                    </button>
+                </div>
+            </div>
 
-            <button
-                onClick={handleSearch}
-                style={{padding: "1% 2%", marginLeft: "1%", backgroundColor: "#E31937", color: "white", border: "none", cursor: "pointer", fontSize: "16px"}}
-            > Search </button>
-
-            {error && <p style={{ color: "red", marginTop: "2%" }}>{error}</p>}
+            {error && (
+                <div className="row mt-3">
+                    <div className="col text-center">
+                        <p className="text-danger">{error}</p>
+                    </div>
+                </div>
+            )}
 
             {pokemonData && (
-                <div style={{marginTop: "2%"}}>
-                    <h4>{pokemonData.name}</h4>
-                    <div>
+                <div className="row mt-4">
+                    <div className="col text-center">
+                        <h4>{pokemonData.name}</h4>
                         <img
                             src={shinyMode ? pokemonData.spriteImageUrl : pokemonData.baseImageUrl}
                             alt={`${pokemonData.name} sprite`}
-                            style={{ width: "15%", height: "15%"}}
+                            style={{ width: "150px", height: "150px" }}
+                            className="img-fluid"
                         />
-                        <div>
+                        <div className="mt-2">
                             <label>
-                                <input type="checkbox" checked={shinyMode} onChange={(e) => setShinyMode(e.target.checked)} />
-                                Shiny mode
+                                <input
+                                    type="checkbox"
+                                    checked={shinyMode}
+                                    onChange={(e) => setShinyMode(e.target.checked)}
+                                    className="me-2"
+                                />
+                                Shiny Mode
                             </label>
                         </div>
                     </div>
