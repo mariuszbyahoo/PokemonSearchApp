@@ -19,7 +19,7 @@ const SearchPokemon = () => {
             debugger;
             const response = await fetch(`/api/SearchByName?name=${encodeURIComponent(pokemonName)}`);
 
-            if(!response.ok && response.status != 404){
+            if(!response.ok && response.status !== 404){
                 throw new Error(`Server responded with status ${response.status}: ${response.statusText}`);
             }
 
